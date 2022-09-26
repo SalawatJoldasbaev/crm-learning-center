@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Branch;
 use App\Models\File;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,6 +17,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Branch::class);
             $table->foreignIdFor(File::class);
             $table->string('name');
             $table->string('phone', 13)->unique();

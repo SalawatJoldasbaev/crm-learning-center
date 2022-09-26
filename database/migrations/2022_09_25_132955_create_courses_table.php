@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('price');
+            $table->integer('lesson_duration')->default(90);
+            $table->integer('month');
+            $table->text('decription')->nullable();
             $table->timestamps();
         });
     }
