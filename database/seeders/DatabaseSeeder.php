@@ -3,7 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Branch;
+use App\Models\Employee;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +18,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Branch::create([
+            'name' => 'Main Branch'
+        ]);
+        Employee::create([
+            'branch_id' => 1,
+            'name' => 'CEO',
+            'phone' => '+998953558899',
+            'password' => Hash::make(8899),
+            'role' => ['ceo'],
+            'gender' => 'male',
+        ]);
+        $this->call([
+            RoleSeeder::class
+        ]);
     }
 }

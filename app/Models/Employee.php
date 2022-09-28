@@ -12,4 +12,15 @@ class Employee extends Authenticatable
 {
     use HasFactory;
     use HasApiTokens;
+
+    protected $fillable = [
+        'name', 'password', 'phone', 'file_id', 'role', 'gender', 'salary', 'branch_id'
+    ];
+    protected $casts = [
+        'role' => 'json'
+    ];
+    public function branch()
+    {
+        return $this->hasOne(Branch::class, 'id', 'branch_id');
+    }
 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('month');
             $table->text('decription')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

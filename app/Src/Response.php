@@ -17,7 +17,7 @@ class Response
             'code' => $code,
             'message' => $message,
             'data' => $data
-        ]);
+        ], $code);
     }
 
     public static function error(string $message = 'unknown error', array $data = [], int $code = 500)
@@ -27,6 +27,6 @@ class Response
             'code' => $code,
             'message' => $message,
             'data' => $data
-        ]);
+        ], $code);
     }
 }

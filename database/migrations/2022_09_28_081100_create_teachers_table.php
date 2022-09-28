@@ -1,10 +1,9 @@
 <?php
 
-use App\Models\Branch;
 use App\Models\File;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -15,16 +14,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Branch::class);
+            $table->json('branch_ids');
             $table->foreignIdFor(File::class)->nullable();
             $table->string('name');
-            $table->string('phone', 13)->unique();
-            $table->string('password')->nullable();
-            $table->json('role');
-            $table->enum('gender', ['male', 'female']);
-            $table->double('salary')->nullable();
+            $table->string('phone', 13)->nullable()->unique();
+            $table->string('password');
+            $table->double('salary_percentage')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -37,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('teachers');
     }
 };

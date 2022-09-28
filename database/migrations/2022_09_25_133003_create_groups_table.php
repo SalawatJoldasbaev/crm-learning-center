@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('name');
             $table->json('days');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
