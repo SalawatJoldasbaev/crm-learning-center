@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Employee;
+namespace App\Http\Requests\Teacher;
 
 use App\Src\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterEmployeeRequest extends FormRequest
+class CreateTeacherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,13 +29,11 @@ class RegisterEmployeeRequest extends FormRequest
         return [
             'branch_id' => 'required|exists:branches,id',
             'name' => 'required',
-            'phone' => 'required|unique:teachers,phone',
+            'phone' => 'required|unique:employees,phone',
             'file_id' => 'nullable|exists:files,uuid',
             'password' => 'required',
-            'roles' => 'required|array',
             'gender' => 'required_with:male,female',
-            'salary' => 'nullable|numeric',
-            'salary_percentage' => 'nullable'
+            'salary_percentage' => 'required'
         ];
     }
 

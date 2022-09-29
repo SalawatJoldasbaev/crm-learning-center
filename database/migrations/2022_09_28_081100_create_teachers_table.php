@@ -16,12 +16,13 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->json('branch_ids');
+            $table->foreignId('branch_id');
             $table->foreignIdFor(File::class)->nullable();
             $table->string('name');
             $table->string('phone', 13)->nullable()->unique();
             $table->string('password');
             $table->double('salary_percentage')->nullable();
+            $table->enum('gender', ['male', 'female']);
             $table->timestamps();
             $table->softDeletes();
         });

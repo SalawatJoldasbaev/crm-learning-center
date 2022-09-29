@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Src\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
@@ -72,16 +73,35 @@ class AuthController extends Controller
     }
     public function register(RegisterEmployeeRequest $request)
     {
-        $newEmployee = Employee::create([
-            'branch_id' => $request->branch_id,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'file_id' => $request->file_id,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'gender' => $request->gender,
-            'salary' => $request->salary,
-        ]);
-        return $newEmployee;
+        DB::transaction(function () use ($request) {
+            $roles = $request->roles;
+            if (in_array('teacher', $request->roles)) {
+                $index = array_search('teacher', $roles);
+                unset($roles[$index]);
+                $roles = array_values($roles);
+            }
+            $newEmployee = Employee::create([
+                'branch_id' => $request->branch_id,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'file_id' => $request->file_id,
+                'password' => Hash::make($request->password),
+                'role' => $roles,
+                'gender' => $request->gender,
+                'salary' => $request->salary,
+            ]);
+            if (in_array('teacher', $request->roles)) {
+                Teacher::create([
+                    'branch_id' => $request->branch_id,
+                    'file_id' => $request->file_id,
+                    'name' => $request->name,
+                    'phone' => $request->phone,
+                    'password' => Hash::make($request->password),
+                    'salary_percentage' => $request->salary_percentage,
+                    'gender' => $request->gender,
+                ]);
+            }
+        });
+        return Response::success();
     }
 }
