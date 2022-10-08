@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('password')->default('1234');
             $table->string('address')->nullable();
             $table->date('birthday')->nullable();
+            $table->json('addition_phone')->nullable();
             $table->enum('gender', ['male', 'female']);
             $table->timestamps();
             $table->softDeletes();

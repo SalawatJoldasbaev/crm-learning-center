@@ -22,6 +22,7 @@ class AuthController extends Controller
         $teacher = Teacher::where('phone', $request->phone)->first();
         $roles = array_merge([], $employee?->role ?? []);
         $role = $request->role;
+        $data = false;
         if ($student) {
             $roles[] = 'student';
         }
@@ -38,7 +39,7 @@ class AuthController extends Controller
             }
         } elseif (count($roles) > 1 and is_null($role)) {
             return Response::error('role', [
-                'roles' => $roles
+                'roles' => $roles,
             ], 401);
         } elseif (!is_null($role)) {
             if (in_array($role, $employee->role)) {
@@ -50,9 +51,9 @@ class AuthController extends Controller
             }
         }
         if ($data === false) {
-            return Response::error('phone or password incorrect', code: 401);
+            return Response::error('phone or password incorrect', code:401);
         }
-        return Response::success(data: $data);
+        return Response::success(data:$data);
     }
     private function createToken($role, $user, $password)
     {
@@ -68,7 +69,7 @@ class AuthController extends Controller
                 'name' => $user->branch->name,
             ],
             'token' => $token,
-            'role' => $role
+            'role' => $role,
         ];
     }
     public function register(RegisterEmployeeRequest $request)

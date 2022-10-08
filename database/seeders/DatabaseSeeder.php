@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Branch::create([
-            'name' => 'Main Branch'
+            'name' => 'Main Branch',
         ]);
         Employee::create([
             'branch_id' => 1,
@@ -30,7 +30,8 @@ class DatabaseSeeder extends Seeder
             'gender' => 'male',
         ]);
         $this->call([
-            RoleSeeder::class
+            RoleSeeder::class,
+            TimeCourseSeeder::class,
         ]);
     }
 }
