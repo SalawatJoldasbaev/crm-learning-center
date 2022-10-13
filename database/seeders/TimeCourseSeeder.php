@@ -15,7 +15,8 @@ class TimeCourseSeeder extends Seeder
     public function run()
     {
         $start = strtotime('07:00');
-        $end = strtotime('20:00');
+        $end = strtotime('21:30');
+
         $next_time = $start;
         while ($end >= $next_time) {
             TimeCourse::create([

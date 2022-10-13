@@ -2,7 +2,6 @@
 
 use App\Models\Course;
 use App\Models\Room;
-use App\Models\Teacher;
 use App\Models\TimeCourse;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,7 +21,6 @@ return new class extends Migration
             $table->foreignIdFor(Course::class);
             $table->foreignIdFor(Room::class);
             $table->foreignIdFor(TimeCourse::class, 'time_id');
-            $table->foreignIdFor(Teacher::class, 'teacher_id');
             $table->string('name');
             $table->json('days');
             $table->date('group_start_date');

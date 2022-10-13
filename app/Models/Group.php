@@ -22,4 +22,19 @@ class Group extends Model
     protected $casts = [
         'days' => 'json',
     ];
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function time()
+    {
+        return $this->belongsTo(TimeCourse::class);
+    }
 }

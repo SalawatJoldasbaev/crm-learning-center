@@ -30,7 +30,7 @@ class AuthController extends Controller
             $roles[] = 'teacher';
         }
         if (count($roles) == 1 and is_null($role)) {
-            if (in_array($roles[0], $employee->role)) {
+            if (in_array($roles[0], $employee?->role ?? [])) {
                 $data = $this->createToken($roles[0], $employee, $request->password);
             } elseif ($roles[0] == 'student') {
                 $data = $this->createToken($roles[0], $student, $request->password);
@@ -42,7 +42,7 @@ class AuthController extends Controller
                 'roles' => $roles,
             ], 401);
         } elseif (!is_null($role)) {
-            if (in_array($role, $employee->role)) {
+            if (in_array($role, $employee?->role ?? [])) {
                 $data = $this->createToken($role, $employee, $request->password);
             } elseif ($role == 'student') {
                 $data = $this->createToken($role, $student, $request->password);
@@ -81,16 +81,19 @@ class AuthController extends Controller
                 unset($roles[$index]);
                 $roles = array_values($roles);
             }
-            $newEmployee = Employee::create([
-                'branch_id' => $request->branch_id,
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'file_id' => $request->file_id,
-                'password' => Hash::make($request->password),
-                'role' => $roles,
-                'gender' => $request->gender,
-                'salary' => $request->salary,
-            ]);
+            if (!empty($roles)) {
+                $newEmployee = Employee::create([
+                    'branch_id' => $request->branch_id,
+                    'name' => $request->name,
+                    'phone' => $request->phone,
+                    'file_id' => $request->file_id,
+                    'password' => Hash::make($request->password),
+                    'role' => $roles,
+                    'gender' => $request->gender,
+                    'salary' => $request->salary,
+                ]);
+            }
+
             if (in_array('teacher', $request->roles)) {
                 Teacher::create([
                     'branch_id' => $request->branch_id,

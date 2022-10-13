@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         Branch::create([
             'name' => 'Main Branch',
         ]);
+
         Employee::create([
             'branch_id' => 1,
             'name' => 'CEO',
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
             'role' => ['ceo'],
             'gender' => 'male',
         ]);
+
         $this->call([
             RoleSeeder::class,
             TimeCourseSeeder::class,

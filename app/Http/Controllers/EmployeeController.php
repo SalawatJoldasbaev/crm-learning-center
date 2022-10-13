@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Branch;
+use App\Models\Employee;
+use App\Src\Response;
+use Illuminate\Http\Request;
+
+class EmployeeController extends Controller
+{
+    public function ShowAllEmployees(Request $request)
+    {
+        $employees = Employee::when($request->role, function ($query, $role) {
+            return $query->whereJsonContains('role', $role);
+        })->when($request->search, function ($query, $search) {
+            return $query->where('name', 'like', "%" . $search . "%")
+                ->orWhere('phone', 'like', "%" . $search . "%");
+        })->when($request->branch_id, function ($query, $branch_id) {
+            return $query->where('branch_id', $branch_id);
+        })->get();
+        $branches = Branch::all();
+        $final = [];
+        foreach ($employees as $employee) {
+            $final[] = [
+                'id' => $employee->id,
+                'file' => null,
+                'name' => $employee->name,
+                'phone' => $employee->phone,
+                'role' => $employee->role,
+                'role' => $employee->role,
+                'gender' => $employee->gender,
+                'salary' => $employee->salary,
+                'branch' => [
+                    'id' => $employee->branch_id,
+                    'name' => $branches->where('id', $employee->branch_id)->first()->name,
+                ],
+            ];
+        }
+        return Response::success(data:$final);
+    }
+}

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Student extends Model
+class Student extends Authenticatable
 {
-    use HasFactory;
+    // use HasFactory;
+    use HasApiTokens;
 
     protected $fillable = [
         'addition_phone',
@@ -24,4 +25,9 @@ class Student extends Model
     protected $casts = [
         'addition_phone' => 'json',
     ];
+
+    public function branch()
+    {
+        return $this->hasOne(Branch::class, 'id', 'branch_id');
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Src;
 
-
 class Response
 {
     public static function data(array $data, int $code)
@@ -16,7 +15,7 @@ class Response
             'success' => true,
             'code' => $code,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ], $code);
     }
 
@@ -26,7 +25,7 @@ class Response
             'success' => false,
             'code' => $code,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ], $code);
     }
 }

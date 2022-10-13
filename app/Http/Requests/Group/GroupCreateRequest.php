@@ -30,7 +30,7 @@ class GroupCreateRequest extends FormRequest
             'course_id' => 'required|exists:courses,id',
             'room_id' => 'required|exists:rooms,id',
             'time_id' => 'required|exists:time_courses,id',
-            'teacher_id' => 'required|exists:teachers,id',
+            'teacher_ids' => 'required',
             'name' => 'required',
             'days' => 'required|array',
             'group_start_date' => 'required',
