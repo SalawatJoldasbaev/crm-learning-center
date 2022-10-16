@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterEmployeeRequest extends FormRequest
+class UpdateEmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,15 +27,15 @@ class RegisterEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
+            'employee_id' => 'required|exists:employees,id',
             'branch_id' => 'required|exists:branches,id',
             'name' => 'required',
-            'phone' => 'required|unique:teachers,phone',
+            'phone' => 'required|unique:employees,phone,' . $this->employee_id,
             'file_id' => 'nullable|exists:files,uuid',
-            'password' => 'required',
             'roles' => 'required|array',
-            'gender' => 'required_with:male,female',
+            'gender' => 'required|required_with:male,female',
             'salary' => 'nullable|numeric',
-            'salary_percentage' => 'nullable',
+            'password' => 'nullable',
         ];
     }
 

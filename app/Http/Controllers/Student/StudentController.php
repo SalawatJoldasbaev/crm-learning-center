@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StudentCreateRequest;
+use App\Http\Requests\Student\UpdateStudentRequest;
 use App\Models\Student;
 use App\Src\Response;
 use Illuminate\Http\Request;
@@ -57,6 +58,25 @@ class StudentController extends Controller
                 ],
             ];
         }
-        return Response::success(data:$final);
+        return Response::success(data: $final);
+    }
+
+    public function UpdateStudent(UpdateStudentRequest $request, Student $student)
+    {
+        $data = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'birthday' => $request->birthday,
+            'gender' => $request->gender,
+            'addition_phone' => $request->addition_phone,
+        ];
+
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
+        }
+        $student->update($data);
+        return Response::success();
     }
 }

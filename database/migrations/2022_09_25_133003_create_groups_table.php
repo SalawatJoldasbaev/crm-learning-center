@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('name');
             $table->json('days');
             $table->date('group_start_date');
+            $table->date('group_end_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

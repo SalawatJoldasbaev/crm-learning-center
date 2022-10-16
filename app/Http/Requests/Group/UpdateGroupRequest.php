@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Employee;
+namespace App\Http\Requests\Group;
 
 use App\Src\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterEmployeeRequest extends FormRequest
+class UpdateGroupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,15 +27,15 @@ class RegisterEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch_id' => 'required|exists:branches,id',
+            'group_id' => 'required|exists:groups,id',
+            'course_id' => 'required|exists:courses,id',
+            'room_id' => 'required|exists:rooms,id',
+            'time_id' => 'required|exists:time_courses,id',
+            'teacher_ids' => 'required',
             'name' => 'required',
-            'phone' => 'required|unique:teachers,phone',
-            'file_id' => 'nullable|exists:files,uuid',
-            'password' => 'required',
-            'roles' => 'required|array',
-            'gender' => 'required_with:male,female',
-            'salary' => 'nullable|numeric',
-            'salary_percentage' => 'nullable',
+            'days' => 'required|array',
+            'group_start_date' => 'required',
+            'group_end_date' => 'required',
         ];
     }
 

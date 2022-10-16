@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Teacher\CreateTeacherRequest;
+use App\Http\Requests\Teacher\UpdateTeacherRequest;
 use App\Models\Branch;
 use App\Models\Teacher;
 use App\Src\Response;
@@ -51,5 +52,24 @@ class TeacherController extends Controller
             ];
         }
         return Response::success(data:$final);
+    }
+
+    public function UpdateTeacher(UpdateTeacherRequest $request, Teacher $teacher)
+    {
+        $data = [
+            'branch_id' => $request->branch_id,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'roles' => $request->roles,
+            'gender' => $request->gender,
+            'salary' => $request->salary,
+            'file_id' => $request->file_id,
+            'salary_percentage' => $request->salary_percentage,
+        ];
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
+        }
+        $teacher->update($data);
+        return Response::success();
     }
 }

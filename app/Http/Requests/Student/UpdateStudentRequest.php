@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Room;
+namespace App\Http\Requests\Student;
 
 use App\Src\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RoomCreateRequest extends FormRequest
+class UpdateStudentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,14 +27,20 @@ class RoomCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch_id' => 'required|exists:branches,id',
-            'name' => 'required',
-            'capacity' => 'required',
+            'student_id' => 'required|exists:students,id',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required|unique:students,phone,' . $this->student_id,
+            'password' => 'nullable',
+            'address' => 'required',
+            'birthday' => 'required',
+            'gender' => 'required',
+            'addition_phone' => 'nullable|array'
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code:422));
+        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code: 422));
     }
 }

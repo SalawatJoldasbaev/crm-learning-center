@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Group extends Model
 {
@@ -17,6 +18,7 @@ class Group extends Model
         'name',
         'days',
         'group_start_date',
+        'group_end_date',
     ];
 
     protected $casts = [
@@ -36,5 +38,13 @@ class Group extends Model
     public function time()
     {
         return $this->belongsTo(TimeCourse::class);
+    }
+
+    protected function studentCount(): Attribute
+    {
+        $count = StudentInGroup::where('group_id', $this->id)->count();
+        return Attribute::make(
+            get: fn () => $count,
+        );
     }
 }

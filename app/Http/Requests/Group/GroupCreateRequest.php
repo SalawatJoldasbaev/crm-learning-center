@@ -34,6 +34,7 @@ class GroupCreateRequest extends FormRequest
             'name' => 'required',
             'days' => 'required|array',
             'group_start_date' => 'required',
+            'group_end_date' => 'required',
         ];
     }
 

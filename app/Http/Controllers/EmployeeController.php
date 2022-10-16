@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Models\Branch;
 use App\Models\Employee;
 use App\Src\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -37,6 +39,32 @@ class EmployeeController extends Controller
                 ],
             ];
         }
-        return Response::success(data:$final);
+        return Response::success(data: $final);
+    }
+
+    public function UpdateEmployee(UpdateEmployeeRequest $request, Employee $employee)
+    {
+        $newRoles = $request->roles;
+
+        foreach ($newRoles as $role) {
+            if (in_array($role, ['teacher', 'student'])) {
+                return Response::error('not updated role: teacher, student', code: 400);
+            }
+        }
+        $data = [
+            'branch_id' => $request->branch_id,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'role' => $request->roles,
+            'gender' => $request->gender,
+            'salary' => $request->salary,
+            'file_id' => $request->file_id,
+            'salary' => $request->salary,
+        ];
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
+        }
+        $employee->update($data);
+        return Response::success();
     }
 }
