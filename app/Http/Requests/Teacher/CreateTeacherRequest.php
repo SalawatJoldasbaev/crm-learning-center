@@ -27,7 +27,6 @@ class CreateTeacherRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch_id' => 'required|exists:branches,id',
             'name' => 'required',
             'phone' => 'required|unique:teachers,phone',
             'file_id' => 'nullable|exists:files,uuid',
@@ -39,6 +38,6 @@ class CreateTeacherRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code:422));
+        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code: 422));
     }
 }

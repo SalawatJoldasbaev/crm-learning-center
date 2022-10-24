@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Branch;
 use App\Models\Group;
 use App\Models\Student;
 use Illuminate\Database\Migrations\Migration;
@@ -16,13 +15,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('student_in_groups', function (Blueprint $table) {
+        Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Student::class);
             $table->foreignIdFor(Group::class);
-            $table->date('start_date');
+            $table->foreignIdFor(Student::class);
+            $table->date('date');
+            $table->boolean('status');
+            $table->string('description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_in_groups');
+        Schema::dropIfExists('attendances');
     }
 };

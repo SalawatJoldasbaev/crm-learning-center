@@ -1,13 +1,16 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\RoomController;
-use App\Http\Controllers\Student\StudentController;
-use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\Student\StudentController;
 
 Route::post('/signIn', [AuthController::class, 'signIn']);
 Route::middleware('auth:sanctum')->group(function () {
@@ -52,7 +55,18 @@ Route::middleware('auth:sanctum')->group(function () {
         ->controller(GroupController::class)
         ->group(function () {
             Route::post('/', 'createGroup');
+            Route::post('/attendance', [AttendanceController::class, 'SetAttendance']);
+            Route::post('/add-student', 'AddStudentToGroup');
             Route::get('/', 'ShowAllGroups');
             Route::patch('/{group}', 'UpdateGroup');
+            Route::get('/{group}/attendance', [AttendanceController::class, 'GetAttendance']);
         });
+    Route::prefix('/branches')
+        ->controller(BranchController::class)
+        ->group(function () {
+            Route::post('/', 'CreateBranch');
+            Route::get('/', 'ShowAllBranches');
+            Route::patch('/{branch}', 'UpdateBranch');
+        });
+    Route::get('/schedule', [ScheduleController::class, 'GetSchedule']);
 });

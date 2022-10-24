@@ -13,7 +13,6 @@ class RoomController extends Controller
     public function createRoom(RoomCreateRequest $request)
     {
         $room = Room::create([
-            'branch_id' => $request->branch_id,
             'name' => $request->name,
             'capacity' => $request->capacity,
         ]);
@@ -22,11 +21,7 @@ class RoomController extends Controller
 
     public function ShowAllRooms(Request $request)
     {
-        $rooms = Room::with([
-            'branch' => function ($query) {
-                $query->select('id', 'name');
-            },
-        ])->select('id', 'branch_id', 'name', 'capacity')->paginate($request->per_page ?? 30);
+        $rooms = Room::select('id', 'name', 'capacity')->paginate($request->per_page ?? 30);
         $data = [
             'per_page' => $rooms->PerPage(),
             'last_page' => $rooms->LastPage(),
@@ -35,14 +30,13 @@ class RoomController extends Controller
         foreach ($rooms as $room) {
             $data['data'][] = $room;
         }
-        return Response::success(data:$data);
+        return Response::success(data: $data);
     }
 
     public function UpdateRoom(UpdateRoomRequest $request, Room $room)
     {
         $room->update([
             'name' => $request->name,
-            'branch_id' => $request->branch_id,
             'capacity' => $request->capacity,
         ]);
         return Response::success();

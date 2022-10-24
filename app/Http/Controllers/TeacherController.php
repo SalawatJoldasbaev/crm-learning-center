@@ -15,7 +15,6 @@ class TeacherController extends Controller
     public function create(CreateTeacherRequest $request)
     {
         Teacher::create([
-            'branch_id' => $request->branch_id,
             'file_id' => $request->file_id,
             'name' => $request->name,
             'phone' => $request->phone,
@@ -45,19 +44,14 @@ class TeacherController extends Controller
                 'phone' => $teacher->phone,
                 'gender' => $teacher->gender,
                 'salary_percentage' => $teacher->salary_percentage,
-                'branch' => [
-                    'id' => $teacher->branch_id,
-                    'name' => $branches->where('id', $teacher->branch_id)->first()->name,
-                ],
             ];
         }
-        return Response::success(data:$final);
+        return Response::success(data: $final);
     }
 
     public function UpdateTeacher(UpdateTeacherRequest $request, Teacher $teacher)
     {
         $data = [
-            'branch_id' => $request->branch_id,
             'name' => $request->name,
             'phone' => $request->phone,
             'roles' => $request->roles,

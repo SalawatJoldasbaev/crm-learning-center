@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Room;
+namespace App\Http\Requests;
 
 use App\Src\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RoomCreateRequest extends FormRequest
+class SetAttendanceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,11 @@ class RoomCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'capacity' => 'required',
+            'group_id' => 'required|exists:groups,id',
+            'student_id' => 'required|exists:students,id',
+            'date' => 'required',
+            'description' => 'nullable',
+            'status' => 'required|boolean'
         ];
     }
 

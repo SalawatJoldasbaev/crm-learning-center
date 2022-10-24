@@ -22,7 +22,6 @@ class StudentController extends Controller
             'address' => $request->address,
             'birthday' => $request->birthday,
             'gender' => $request->gender,
-            'branch_id' => $request->user()->branch_id,
             'addition_phone' => $request->addition_phone,
         ]);
         return Response::success();
@@ -52,10 +51,6 @@ class StudentController extends Controller
                 'birthday' => $student->birthday,
                 'gender' => $student->gender,
                 'addition_phone' => $student->addition_phone,
-                'branch' => [
-                    'id' => $student->branch_id,
-                    'name' => $student->branch->name,
-                ],
             ];
         }
         return Response::success(data: $final);

@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Employee::create([
-            'branch_id' => 1,
             'name' => 'CEO',
             'phone' => '+998953558899',
             'password' => Hash::make(8899),

@@ -27,7 +27,6 @@ class UpdateRoomRequest extends FormRequest
     public function rules()
     {
         return [
-            'room_id' => 'required|exists:rooms,id',
             'branch_id' => 'required|exists:branches,id',
             'name' => 'required',
             'capacity' => 'required',
@@ -36,6 +35,6 @@ class UpdateRoomRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code:422));
+        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code: 422));
     }
 }

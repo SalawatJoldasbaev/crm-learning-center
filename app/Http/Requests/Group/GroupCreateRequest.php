@@ -34,12 +34,12 @@ class GroupCreateRequest extends FormRequest
             'name' => 'required',
             'days' => 'required|array',
             'group_start_date' => 'required',
-            'group_end_date' => 'required',
+            'group_end_date' => 'nullable',
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code:422));
+        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code: 422));
     }
 }

@@ -28,7 +28,6 @@ class UpdateEmployeeRequest extends FormRequest
     {
         return [
             'employee_id' => 'required|exists:employees,id',
-            'branch_id' => 'required|exists:branches,id',
             'name' => 'required',
             'phone' => 'required|unique:employees,phone,' . $this->employee_id,
             'file_id' => 'nullable|exists:files,uuid',
@@ -41,6 +40,6 @@ class UpdateEmployeeRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code:422));
+        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code: 422));
     }
 }

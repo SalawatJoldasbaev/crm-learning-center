@@ -16,7 +16,6 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('branch_id');
             $table->foreignIdFor(File::class)->nullable();
             $table->string('name');
             $table->string('phone', 13)->nullable()->unique();

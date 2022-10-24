@@ -28,7 +28,6 @@ class UpdateTeacherRequest extends FormRequest
     {
         return [
             'teacher_id' => 'required|exists:teachers,id',
-            'branch_id' => 'required|exists:branches,id',
             'name' => 'required',
             'phone' => 'required|unique:teachers,phone,' . $this->teacher_id,
             'file_id' => 'nullable|exists:files,uuid',
@@ -40,6 +39,6 @@ class UpdateTeacherRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code:422));
+        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code: 422));
     }
 }

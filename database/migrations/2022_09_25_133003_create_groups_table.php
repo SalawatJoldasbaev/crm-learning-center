@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Course;
+use App\Models\Group;
 use App\Models\Room;
 use App\Models\TimeCourse;
 use Illuminate\Database\Migrations\Migration;
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->json('days');
             $table->date('group_start_date');
             $table->date('group_end_date')->nullable();
+            $table->boolean('active')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

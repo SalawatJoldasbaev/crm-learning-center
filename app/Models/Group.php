@@ -19,6 +19,8 @@ class Group extends Model
         'days',
         'group_start_date',
         'group_end_date',
+        'active',
+        'branch_id',
     ];
 
     protected $casts = [
@@ -46,5 +48,10 @@ class Group extends Model
         return Attribute::make(
             get: fn () => $count,
         );
+    }
+
+    public function ScopeActive($query)
+    {
+        return $query->where('active', true);
     }
 }

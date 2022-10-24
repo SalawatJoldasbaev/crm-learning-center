@@ -51,9 +51,9 @@ class AuthController extends Controller
             }
         }
         if ($data === false) {
-            return Response::error('phone or password incorrect', code:401);
+            return Response::error('phone or password incorrect', code: 401);
         }
-        return Response::success(data:$data);
+        return Response::success(data: $data);
     }
     private function createToken($role, $user, $password)
     {
@@ -64,10 +64,6 @@ class AuthController extends Controller
         return [
             'id' => $user->id,
             'name' => $user->name,
-            'branch' => [
-                'id' => $user->branch_id,
-                'name' => $user->branch->name,
-            ],
             'token' => $token,
             'role' => $role,
         ];
@@ -83,7 +79,6 @@ class AuthController extends Controller
             }
             if (!empty($roles)) {
                 $newEmployee = Employee::create([
-                    'branch_id' => $request->branch_id,
                     'name' => $request->name,
                     'phone' => $request->phone,
                     'file_id' => $request->file_id,
@@ -96,7 +91,6 @@ class AuthController extends Controller
 
             if (in_array('teacher', $request->roles)) {
                 Teacher::create([
-                    'branch_id' => $request->branch_id,
                     'file_id' => $request->file_id,
                     'name' => $request->name,
                     'phone' => $request->phone,

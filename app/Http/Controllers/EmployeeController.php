@@ -21,7 +21,6 @@ class EmployeeController extends Controller
         })->when($request->branch_id, function ($query, $branch_id) {
             return $query->where('branch_id', $branch_id);
         })->get();
-        $branches = Branch::all();
         $final = [];
         foreach ($employees as $employee) {
             $final[] = [
@@ -33,10 +32,6 @@ class EmployeeController extends Controller
                 'role' => $employee->role,
                 'gender' => $employee->gender,
                 'salary' => $employee->salary,
-                'branch' => [
-                    'id' => $employee->branch_id,
-                    'name' => $branches->where('id', $employee->branch_id)->first()->name,
-                ],
             ];
         }
         return Response::success(data: $final);
@@ -52,7 +47,6 @@ class EmployeeController extends Controller
             }
         }
         $data = [
-            'branch_id' => $request->branch_id,
             'name' => $request->name,
             'phone' => $request->phone,
             'role' => $request->roles,
