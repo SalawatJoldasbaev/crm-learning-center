@@ -25,6 +25,7 @@ class Group extends Model
 
     protected $casts = [
         'days' => 'json',
+        'active' => 'boolean',
     ];
 
     public function course()

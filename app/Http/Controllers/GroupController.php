@@ -79,6 +79,7 @@ class GroupController extends Controller
                 ],
                 'tachers' => $tachers,
                 'name' => $group->name,
+                'active' => $group->active,
                 'student_count' => $group->student_count,
                 'group_start_date' => $group->group_start_date,
                 'group_end_date' => $group->group_end_date,
@@ -127,6 +128,13 @@ class GroupController extends Controller
             'start_date' => $request->start_date,
         ]);
 
+        return Response::success();
+    }
+
+    public function ActiveGroup(Request $request, Group $group)
+    {
+        $group->active = true;
+        $group->save();
         return Response::success();
     }
 }
