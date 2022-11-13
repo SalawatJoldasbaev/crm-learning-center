@@ -11,6 +11,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\TimeController;
 
 Route::post('/signIn', [AuthController::class, 'signIn']);
 Route::middleware('auth:sanctum')->group(function () {
@@ -27,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->group(function () {
             Route::post('/', 'create');
             Route::get('/', 'ShowAllTeachers');
+            Route::get('/selectable', 'selectableTeachers');
             Route::patch('/{teacher}', 'UpdateTeacher');
         });
     Route::prefix('/students')
@@ -67,6 +69,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', 'CreateBranch');
             Route::get('/', 'ShowAllBranches');
             Route::patch('/{branch}', 'UpdateBranch');
+        });
+    Route::prefix('/times')
+        ->controller(TimeController::class)
+        ->group(function () {
+            Route::get('/', 'ShowAllTime');
         });
     Route::get('/schedule', [ScheduleController::class, 'GetSchedule']);
 });

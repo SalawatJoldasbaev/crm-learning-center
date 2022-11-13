@@ -117,6 +117,10 @@ class GroupController extends Controller
 
     public function AddStudentToGroup(AddStudentToGroupRequest $request)
     {
+        $check = StudentInGroup::where('group_id', $request->group_id)->where('student_id', $request->student_id)->first();
+        if ($check) {
+            return Response::error('student id already exists');
+        }
         StudentInGroup::create([
             'group_id' => $request->group_id,
             'student_id' => $request->student_id,

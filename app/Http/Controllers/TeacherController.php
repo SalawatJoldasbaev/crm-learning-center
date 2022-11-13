@@ -33,17 +33,41 @@ class TeacherController extends Controller
                 ->orWhere('phone', 'like', "%" . $search . "%");
         })->when($request->branch_id, function ($query, $branch_id) {
             return $query->where('branch_id', $branch_id);
-        })->get();
+        })->paginate($request->per_page ?? 30);
         $branches = Branch::all();
-        $final = [];
+        $final = [
+            'per_page' => $teachers->perPage(),
+            'last_page' => $teachers->lastPage(),
+            'data' => []
+        ];
         foreach ($teachers as $teacher) {
-            $final[] = [
+            $final['data'][] = [
                 'id' => $teacher->id,
                 'file' => null,
                 'name' => $teacher->name,
                 'phone' => $teacher->phone,
                 'gender' => $teacher->gender,
                 'salary_percentage' => $teacher->salary_percentage,
+            ];
+        }
+        return Response::success(data: $final);
+    }
+
+    public function selectableTeachers(Request $request)
+    {
+        $teachers = Teacher::when($request->search, function ($query, $search) {
+            return $query->where('name', 'like', "%" . $search . "%")
+                ->orWhere('phone', 'like', "%" . $search . "%");
+        })->when($request->branch_id, function ($query, $branch_id) {
+            return $query->where('branch_id', $branch_id);
+        })->get();
+        $final = [];
+
+        foreach ($teachers as $teacher) {
+            $final[] = [
+                'id' => $teacher->id,
+                'name' => $teacher->name,
+                'phone' => $teacher->phone,
             ];
         }
         return Response::success(data: $final);

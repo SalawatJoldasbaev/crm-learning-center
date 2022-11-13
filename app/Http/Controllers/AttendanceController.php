@@ -63,6 +63,7 @@ class AttendanceController extends Controller
             ->where('group_id', $group->id)
             ->get(['student_id', 'date', 'status', 'description']);
         foreach ($students as $student) {
+            $studentStartDate = $student->start_date;
             $student = Student::find($student->student_id);
             $final['students'][] = [
                 'id' => $student->id,
@@ -72,7 +73,8 @@ class AttendanceController extends Controller
                 'birthday' => $student->birthday,
                 'address' => $student->address,
                 'gender' => $student->gender,
-                'balance' => 0,
+                'balance' => $student->balance ?? 0,
+                'start_date' => $studentStartDate,
                 'addition_phone' => $student->addition_phone,
                 'attendance' => $attendances->where('student_id', $student->id)->values(),
             ];

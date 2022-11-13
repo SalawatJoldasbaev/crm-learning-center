@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $table->json('addition_phone')->nullable();
             $table->enum('gender', ['male', 'female']);
+            $table->double('balance')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

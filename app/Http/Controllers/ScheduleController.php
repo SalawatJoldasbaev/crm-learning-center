@@ -35,6 +35,7 @@ class ScheduleController extends Controller
                 ],
                 'teachers' => $tachers,
             ];
+            $Schedule[] = $temp;
         }
         $collect = collect($Schedule)->sortBy([
             ['end_time', 'asc']

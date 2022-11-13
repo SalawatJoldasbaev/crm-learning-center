@@ -16,4 +16,8 @@ class Attendance extends Model
         'status',
         'description'
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 }

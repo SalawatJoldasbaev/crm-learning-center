@@ -68,6 +68,7 @@ class AuthController extends Controller
             'role' => $role,
         ];
     }
+
     public function register(RegisterEmployeeRequest $request)
     {
         DB::transaction(function () use ($request) {

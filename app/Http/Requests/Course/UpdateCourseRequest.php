@@ -31,14 +31,12 @@ class UpdateCourseRequest extends FormRequest
             'file_id' => 'nullable|exists:files,id',
             'name' => 'required',
             'price' => 'required',
-            'lesson_duration' => 'required',
-            'month' => 'required',
             'description' => 'nullable',
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code:422));
+        throw new HttpResponseException(Response::error('error', $validator->errors()->toArray(), code: 422));
     }
 }

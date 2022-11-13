@@ -48,8 +48,6 @@ class CourseController extends Controller
             'name' => $request->name,
             'file_id' => $request->file_id,
             'description' => $request->description,
-            'lesson_duration' => $request->lesson_duration,
-            'month' => $request->month,
             'price' => $request->price,
         ]);
 
