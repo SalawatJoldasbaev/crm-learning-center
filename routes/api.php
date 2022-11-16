@@ -9,13 +9,20 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\TimeController;
 
 Route::post('/signIn', [AuthController::class, 'signIn']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/employees', [AuthController::class, '']);
+    Route::prefix('/payments')
+        ->controller(PaymentController::class)
+        ->group(function () {
+            Route::post('/', 'NewPayment');
+            Route::get('/', 'ShowPayments');
+            Route::get('/amount', 'GetAmount');
+        });
     Route::prefix('/employees')
         ->controller(EmployeeController::class)
         ->group(function () {
@@ -36,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->group(function () {
             Route::post('/', 'createStudent');
             Route::get('/', 'ShowAllStudents');
+            Route::get('/selectable', 'selectableStudents');
+            Route::get('/{student}/groups', 'StudentGroups');
             Route::patch('/{student}', 'UpdateStudent');
         });
     Route::prefix('/courses')

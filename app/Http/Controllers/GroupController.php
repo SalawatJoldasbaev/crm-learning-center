@@ -67,6 +67,7 @@ class GroupController extends Controller
                 'course' => [
                     'id' => $group->course_id,
                     'name' => $group->course->name,
+                    'lesson_duration' => $group->course->lesson_duration,
                 ],
                 'room' => [
                     'id' => $group->room_id,

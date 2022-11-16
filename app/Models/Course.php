@@ -18,6 +18,7 @@ class Course extends Model
         'lesson_duration',
         'month',
         'description',
+        'lessons_per_module'
     ];
 
     public function groups()

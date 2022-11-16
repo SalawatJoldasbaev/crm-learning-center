@@ -79,6 +79,10 @@ class AuthController extends Controller
                 $roles = array_values($roles);
             }
             if (!empty($roles)) {
+                $employee = Employee::where('phone', $request->phone)->first();
+                if ($employee) {
+                    return Response::error('phone already exists', code: 401);
+                }
                 $newEmployee = Employee::create([
                     'name' => $request->name,
                     'phone' => $request->phone,
@@ -91,6 +95,10 @@ class AuthController extends Controller
             }
 
             if (in_array('teacher', $request->roles)) {
+                $employee = Teacher::where('phone', $request->phone)->first();
+                if ($employee) {
+                    return Response::error('phone already exists', code: 401);
+                }
                 Teacher::create([
                     'file_id' => $request->file_id,
                     'name' => $request->name,

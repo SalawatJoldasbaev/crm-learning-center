@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('price');
             $table->integer('lesson_duration')->default(90);
+            $table->integer('lessons_per_module')->default(12);
             $table->integer('month');
             $table->text('description')->nullable();
             $table->timestamps();

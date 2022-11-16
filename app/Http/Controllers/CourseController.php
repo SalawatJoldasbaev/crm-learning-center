@@ -19,6 +19,7 @@ class CourseController extends Controller
             'lesson_duration' => $request->lesson_duration,
             'month' => $request->month,
             'price' => $request->price,
+            'lessons_per_module' => $request->lessons_per_module,
         ]);
 
         return Response::success();

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Course;
+namespace App\Http\Requests\Payment;
 
 use App\Src\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CourseCreateRequest extends FormRequest
+class NewPaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,13 +27,12 @@ class CourseCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'file_id' => 'nullable|exists:files,id',
-            'name' => 'required',
-            'price' => 'required',
-            'lesson_duration' => 'required',
-            'month' => 'required',
-            'description' => 'nullable',
-            'lessons_per_module' => 'required',
+            'student_id' => 'required|exists:students,id',
+            'group_id' => 'required|exists:groups,id',
+            'amount' => 'required',
+            'payment_type' => 'required_with:cash,card,click,payme,bank,Money refunded',
+            'date' => 'required',
+            'description' => 'nullable'
         ];
     }
 
