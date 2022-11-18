@@ -26,6 +26,7 @@ class ScheduleController extends Controller
                 'days' => $group->days,
                 'start_time' => $group->time->time,
                 'end_time' => date('H:i', strtotime($group->time->time . '    + ' . $group->course->lesson_duration . ' minutes',)),
+                'lesson_duration' => $group->course->lesson_duration,
                 'student_count' => $group->student_count,
                 'group_start_date' => $group->group_start_date,
                 'group_end_date' => $group->group_end_date,
