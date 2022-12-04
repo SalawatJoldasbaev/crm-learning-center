@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Group\AddStudentToGroupRequest;
 use App\Http\Requests\Group\GroupCreateRequest;
 use App\Http\Requests\Group\UpdateGroupRequest;
+use App\Models\Course;
 use App\Models\Group;
 use App\Models\Student;
 use App\Models\StudentInGroup;
 use App\Models\TeacherInGroup;
 use App\Src\Response;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -27,19 +29,36 @@ class GroupController extends Controller
         if ($group) {
             return Response::error('Lesson chalk in the room', code: 400);
         }
+        $course = Course::find($request->course_id);
+        if (!$request->group_end_date) {
+            $end_date = strtotime($request->group_start_date . '+' . $course->month . ' months');
+        } else {
+            $end_date = strtotime($request->group_end_date);
+        }
+        $next_date = strtotime($request->group_start_date);
+        $first_lesson = $next_date;
+        while ($next_date <= $end_date) {
+            if (in_array(date('N', $next_date), $request->days)) {
+                $first_lesson = $next_date;
+                break;
+            }
+            $next_date += 86400;
+        }
         $group = Group::create([
             'name' => $request->name,
             'time_id' => $request->time_id,
             'group_start_date' => $request->group_start_date,
-            'group_end_date' => $request->group_end_date,
+            'group_end_date' => $request->group_end_date ?? date('Y-m-d', $end_date),
             'room_id' => $request->room_id,
             'days' => $days,
             'course_id' => $request->course_id,
+            'next_lesson_date' => date('Y-m-d', $first_lesson),
         ]);
-        foreach ($request->teacher_ids as $id) {
+        foreach ($request->teachers  as $teacher) {
             TeacherInGroup::create([
                 'group_id' => $group->id,
-                'teacher_id' => $id,
+                'teacher_id' => $teacher['teacher_id'],
+                'flex' => $teacher['flex']
             ]);
         }
         return Response::success();
@@ -60,6 +79,7 @@ class GroupController extends Controller
                 $tachers[] = [
                     'id' => $temp->teacher_id,
                     'name' => $temp->teacher?->name,
+                    'flex' => $temp->flex
                 ];
             }
             $final['data'][] = [

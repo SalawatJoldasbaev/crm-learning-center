@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Student;
 
+use App\Src\Response;
+use App\Models\Payment;
+use App\Models\Student;
+use Illuminate\Http\Request;
+use App\Models\StudentInGroup;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Student\StudentCreateRequest;
 use App\Http\Requests\Student\UpdateStudentRequest;
-use App\Models\Student;
-use App\Models\StudentInGroup;
-use App\Src\Response;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -107,6 +108,47 @@ class StudentController extends Controller
                 'id' => $group->group_id,
                 'name' => $group->group->name,
                 'active' => $group->active
+            ];
+        }
+        return Response::success(data: $final);
+    }
+
+    public function payments(Request $request, Student $student)
+    {
+        $payments = Payment::where('student_id', $student->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate($request->per_page ?? 150);
+
+        $final = [
+            'last_page' => $payments->lastPage(),
+            'per_page' => $payments->perPage(),
+            'data' => []
+        ];
+
+        foreach ($payments as $payment) {
+            $final['data'][] = [
+                'id' => $payment->id,
+                'employee' => [
+                    'id' => $payment->employee->id,
+                    'name' => $payment->employee->name,
+                    'phone' => $payment->employee->phone,
+                ],
+                'student' => [
+                    'id' => $payment->student->id,
+                    'first_name' => $payment->student->first_name,
+                    'last_name' => $payment->student->last_name,
+                    'phone' => $payment->student->phone,
+                ],
+                'group' => [
+                    'id' => $payment->group->id,
+                    'name' => $payment->group->name,
+                    'active' => $payment->group->active
+                ],
+                'amount' => $payment->amount,
+                'payment_type' => $payment->payment_type,
+                'date' => $payment->date,
+                'description' => $payment->description,
+                'created_at' => $payment->created_at,
             ];
         }
         return Response::success(data: $final);

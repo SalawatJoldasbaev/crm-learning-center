@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Group;
+namespace App\Http\Requests\Expenses;
 
 use App\Src\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class GroupCreateRequest extends FormRequest
+class NewExpenseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,16 +27,11 @@ class GroupCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => 'required|exists:courses,id',
-            'room_id' => 'required|exists:rooms,id',
-            'time_id' => 'required|exists:time_courses,id',
-            'teachers' => 'required|array',
-            'teachers.*.teacher_id' => 'required|exists:teachers,id',
-            'teachers.*.flex' => 'required',
             'name' => 'required',
-            'days' => 'required|array',
-            'group_start_date' => 'required',
-            'group_end_date' => 'nullable',
+            'expense_category_id' => 'required|exists:expense_categories,id',
+            'payee' => 'required',
+            'date' => 'required',
+            'amount' => 'required',
         ];
     }
 

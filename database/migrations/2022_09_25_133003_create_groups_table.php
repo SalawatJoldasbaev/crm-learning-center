@@ -27,6 +27,9 @@ return new class extends Migration
             $table->date('group_start_date');
             $table->date('group_end_date')->nullable();
             $table->boolean('active')->default(false);
+            $table->integer('completed_lesson')->default(0);
+            $table->integer('completed_module')->default(0);
+            $table->date('next_lesson_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

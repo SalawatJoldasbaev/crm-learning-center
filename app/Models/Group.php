@@ -21,6 +21,9 @@ class Group extends Model
         'group_end_date',
         'active',
         'branch_id',
+        'completed_lesson',
+        'completed_module',
+        'next_lesson_date',
     ];
 
     protected $casts = [

@@ -19,6 +19,18 @@ class AttendanceController extends Controller
         if (!$check) {
             return Response::Error('student id invalid', code: 400);
         }
+        $group = Group::find($request->group_id);
+        if ($group->next_lesson_date == $request->date) {
+            $next_date = strtotime($request->date);
+            while ($next_date <= strtotime($group->group_end_date)) {
+                $next_date += 86400;
+                if (in_array(date('N', $next_date), $group->days)) {
+                    break;
+                }
+            }
+            $group->next_lesson_date = date('Y-m-d', $next_date);
+            $group->save();
+        }
         Attendance::create([
             'group_id' => $request->group_id,
             'student_id' => $request->student_id,

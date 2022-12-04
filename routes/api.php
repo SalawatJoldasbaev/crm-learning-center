@@ -9,6 +9,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\Student\StudentController;
@@ -22,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', 'NewPayment');
             Route::get('/', 'ShowPayments');
             Route::get('/amount', 'GetAmount');
+            Route::get('/profit', 'GetProfit');
         });
     Route::prefix('/employees')
         ->controller(EmployeeController::class)
@@ -45,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/', 'ShowAllStudents');
             Route::get('/selectable', 'selectableStudents');
             Route::get('/{student}/groups', 'StudentGroups');
+            Route::get('/{student}/payments', 'payments');
             Route::patch('/{student}', 'UpdateStudent');
         });
     Route::prefix('/courses')
@@ -61,7 +64,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/', 'ShowAllRooms');
             Route::patch('/{room}', 'UpdateRoom');
         });
-
     Route::prefix('/groups')
         ->controller(GroupController::class)
         ->group(function () {
@@ -84,6 +86,12 @@ Route::middleware('auth:sanctum')->group(function () {
         ->controller(TimeController::class)
         ->group(function () {
             Route::get('/', 'ShowAllTime');
+        });
+    Route::prefix('/expenses')
+        ->controller(ExpenseController::class)
+        ->group(function () {
+            Route::post('/', 'NewExpense');
+            Route::get('/', 'GetExpenses');
         });
     Route::get('/schedule', [ScheduleController::class, 'GetSchedule']);
 });
