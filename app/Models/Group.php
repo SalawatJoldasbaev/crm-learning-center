@@ -24,11 +24,13 @@ class Group extends Model
         'completed_lesson',
         'completed_module',
         'next_lesson_date',
+        'lessons',
     ];
 
     protected $casts = [
         'days' => 'json',
         'active' => 'boolean',
+        'lessons' => 'json'
     ];
 
     public function course()

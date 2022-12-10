@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('completed_lesson')->default(0);
             $table->integer('completed_module')->default(0);
             $table->date('next_lesson_date')->nullable();
+            $table->json('lessons');
             $table->timestamps();
             $table->softDeletes();
         });

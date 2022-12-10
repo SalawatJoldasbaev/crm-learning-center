@@ -36,11 +36,32 @@ class GroupController extends Controller
             $end_date = strtotime($request->group_end_date);
         }
         $next_date = strtotime($request->group_start_date);
-        $first_lesson = $next_date;
+        $first_lesson = 0;
+        $lessons = [];
+        $lesson = 0;
         while ($next_date <= $end_date) {
             if (in_array(date('N', $next_date), $request->days)) {
-                $first_lesson = $next_date;
-                break;
+                if ($lesson == $course->lessons_per_module) {
+                    $lesson = 1;
+                    $is_payment_day = true;
+                } else {
+                    $lesson += 1;
+                    $is_payment_day = false;
+                }
+                if ($first_lesson == 0) {
+                    $first_lesson = $next_date;
+                    $lessons[] = [
+                        'lesson_the_month' => $lesson,
+                        'date' => date('Y-m-d', $first_lesson),
+                        'is_payment_day' => false,
+                    ];
+                } else {
+                    $lessons[] = [
+                        'lesson_the_month' => $lesson,
+                        'date' => date('Y-m-d', $next_date),
+                        'is_payment_day' => $is_payment_day,
+                    ];
+                }
             }
             $next_date += 86400;
         }
@@ -53,6 +74,7 @@ class GroupController extends Controller
             'days' => $days,
             'course_id' => $request->course_id,
             'next_lesson_date' => date('Y-m-d', $first_lesson),
+            'lessons' => $lessons,
         ]);
         foreach ($request->teachers  as $teacher) {
             TeacherInGroup::create([
@@ -82,6 +104,13 @@ class GroupController extends Controller
                     'flex' => $temp->flex
                 ];
             }
+            $lessons = collect($group->lessons)
+                ->sortBy([
+                    ['date', 'asc']
+                ])
+                ->where('is_payment_day', true)
+                ->where('date', '>', Carbon::today())
+                ->first();
             $final['data'][] = [
                 'id' => $group->id,
                 'course' => [
@@ -102,6 +131,7 @@ class GroupController extends Controller
                 'name' => $group->name,
                 'active' => $group->active,
                 'student_count' => $group->student_count,
+                'next_payment_date' => $lessons['date'],
                 'group_start_date' => $group->group_start_date,
                 'group_end_date' => $group->group_end_date,
             ];

@@ -2,11 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
+use App\Models\Student;
+use App\Models\StudentInGroup;
+use App\Src\Response;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LessonsCheckController extends Controller
 {
     public function check()
     {
+        $today = Carbon::today();
+        $groups = Group::where('active', true)->where('next_lesson_date', $today)->get();
+        foreach ($groups as $group) {
+            $course = $group->course;
+            $students = StudentInGroup::where('group_id', $group->id)->get();
+            foreach ($students as $student) {
+                $student = $student->student;
+                $student->balance = -$course->price;
+                $student->save();
+            }
+        }
+        return Response::success();
     }
 }

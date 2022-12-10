@@ -36,6 +36,7 @@ class CourseController extends Controller
                 'name' => $course->name,
                 'description' => $course->description,
                 'lesson_duration' => $course->lesson_duration,
+                'lessons_per_module' => $course->lessons_per_module,
                 'month' => $course->month,
                 'price' => $course->price,
             ];

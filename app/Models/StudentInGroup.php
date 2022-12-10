@@ -23,4 +23,9 @@ class StudentInGroup extends Model
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }
