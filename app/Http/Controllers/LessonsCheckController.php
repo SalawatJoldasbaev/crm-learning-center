@@ -17,11 +17,14 @@ class LessonsCheckController extends Controller
         $groups = Group::where('active', true)->where('next_lesson_date', $today)->get();
         foreach ($groups as $group) {
             $course = $group->course;
-            $students = StudentInGroup::where('group_id', $group->id)->get();
-            foreach ($students as $student) {
-                $student = $student->student;
-                $student->balance = -$course->price;
-                $student->save();
+            $payment_date = collect($group->lessons)->where('date', $today->format('Y-m-d'))->first();
+            if ($payment_date['is_payment_day'] == true) {
+                $students = StudentInGroup::where('group_id', $group->id)->get();
+                foreach ($students as $student) {
+                    $student = $student->student;
+                    $student->balance = -$course->price;
+                    $student->save();
+                }
             }
         }
         return Response::success();

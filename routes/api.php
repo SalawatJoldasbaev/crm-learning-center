@@ -10,9 +10,11 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\LessonsCheckController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\StudentsInDebtController;
 use App\Http\Controllers\TimeController;
 
 Route::post('/signIn', [AuthController::class, 'signIn']);
@@ -46,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', 'createStudent');
             Route::get('/', 'ShowAllStudents');
             Route::get('/selectable', 'selectableStudents');
+            Route::get('/debtors', [StudentsInDebtController::class, 'showAllDebtors']);
             Route::get('/{student}/groups', 'StudentGroups');
             Route::get('/{student}/payments', 'payments');
             Route::patch('/{student}', 'UpdateStudent');
@@ -95,3 +98,5 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     Route::get('/schedule', [ScheduleController::class, 'GetSchedule']);
 });
+
+Route::get('/cron/check-payment', [LessonsCheckController::class, 'check']);
