@@ -9,7 +9,9 @@ use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\StudentInGroup;
 use App\Http\Requests\SetAttendanceRequest;
+use App\Models\Salary;
 use App\Models\Student;
+use App\Models\TeacherInGroup;
 
 class AttendanceController extends Controller
 {
@@ -20,6 +22,26 @@ class AttendanceController extends Controller
             return Response::Error('student id invalid', code: 400);
         }
         $group = Group::find($request->group_id);
+        $course = $group->course;
+        if ($request->status === true) {
+            $teachers = TeacherInGroup::where('group_id', $request->group_id)->get();
+            foreach ($teachers as $teacher) {
+                $salary = Salary::where('teacher_id', $teacher->teacher_id)
+                    ->where('date', $request->date)->first();
+                $flex = ($teacher->flex / 100) * $course->price / $course->lessons_per_module;
+                if ($salary) {
+                    $salary->update([
+                        'amount' => $salary->amount + $flex,
+                    ]);
+                } else {
+                    Salary::create([
+                        'teacher_id' => $teacher->teacher_id,
+                        'date' => $request->date,
+                        'amount' => $flex,
+                    ]);
+                }
+            }
+        }
         if ($group->next_lesson_date == $request->date) {
             $next_date = strtotime($request->date);
             while ($next_date <= strtotime($group->group_end_date)) {
