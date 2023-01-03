@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Group::class);
             $table->date('start_date');
             $table->boolean('active')->default(false);
+            $table->double('amount');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -17,6 +17,7 @@ class StudentInGroup extends Model
         'group_id',
         'student_id',
         'start_date',
+        'amount',
     ];
 
     public function group()

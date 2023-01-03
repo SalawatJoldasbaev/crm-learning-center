@@ -97,6 +97,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/', 'GetExpenses');
         });
     Route::get('/schedule', [ScheduleController::class, 'GetSchedule']);
+    Route::get('/expected', [PaymentController::class, 'Expected']);
 });
 
 Route::get('/cron/check-payment', [LessonsCheckController::class, 'check']);

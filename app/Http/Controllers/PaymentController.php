@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Models\TeacherInGroup;
 use App\Http\Requests\FromToRequest;
 use App\Http\Requests\Payment\NewPaymentRequest;
+use App\Models\Group;
+use App\Models\StudentInGroup;
 
 class PaymentController extends Controller
 {
@@ -131,5 +133,21 @@ class PaymentController extends Controller
         $expenses = Expense::WhereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)->sum('amount');
         return Response::success(data: ['amount' => $payments - $expenses]);
+    }
+
+    public function Expected(Request $request)
+    {
+        $groups = Group::where('active', true)->get();
+        $data = [
+            'amount' => 0,
+            'profit' => 0,
+        ];
+        foreach ($groups as $group) {
+            $amount = StudentInGroup::where('group_id', $group->id)
+                ->where('active', true)
+                ->sum('amount');
+            $data['amount'] += $amount;
+        }
+        return Response::success(data: $data);
     }
 }

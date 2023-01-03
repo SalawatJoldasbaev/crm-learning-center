@@ -173,7 +173,9 @@ class GroupController extends Controller
         if ($check) {
             return Response::error('student id already exists');
         }
+
         StudentInGroup::create([
+            'amount' => $request->amount ?? Group::find($request->group_id)->course->price,
             'group_id' => $request->group_id,
             'student_id' => $request->student_id,
             'start_date' => $request->start_date,
