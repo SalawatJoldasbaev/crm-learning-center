@@ -203,9 +203,18 @@ class GroupController extends Controller
             'lessons' => $lessons,
         ]);
         $teachers = TeacherInGroup::where('group_id', $group->id)->get();
+        $ids = $requestTeachers->pluck('teacher_id')->toArray();
         foreach ($teachers as $teacher) {
-            if (!in_array($teacher->teacher_id, $requestTeachers->pluck('teacher_id')->toArray())) {
+            $requestTeacher = $requestTeachers->where('teacher_id', $teacher->id)->first();
+            if (!in_array($teacher->teacher_id, $ids)) {
                 $teacher->delete();
+            }
+            if (in_array($teacher->teacher_id, $ids)) {
+                if ($teacher->flex != $requestTeacher['flex']) {
+                    $teacher->update([
+                        'flex' => $requestTeacher['flex'],
+                    ]);
+                }
             }
         }
         foreach ($requestTeachers as $teacher) {
