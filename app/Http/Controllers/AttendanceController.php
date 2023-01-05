@@ -113,6 +113,7 @@ class AttendanceController extends Controller
                 'gender' => $student->gender,
                 'balance' => $student->balance ?? 0,
                 'start_date' => $studentStartDate,
+                'active' => $student->active,
                 'addition_phone' => $student->addition_phone,
                 'attendance' => $attendances->where('student_id', $student->id)->values(),
             ];
