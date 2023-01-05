@@ -131,7 +131,7 @@ class GroupController extends Controller
                 'name' => $group->name,
                 'active' => $group->active,
                 'student_count' => $group->student_count,
-                'next_payment_date' => $lessons['date'],
+                'next_payment_date' => isset($lessons['date']) ? $lessons['date'] : null,
                 'group_start_date' => $group->group_start_date,
                 'group_end_date' => $group->group_end_date,
             ];
