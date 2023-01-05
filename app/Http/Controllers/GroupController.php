@@ -141,26 +141,37 @@ class GroupController extends Controller
 
     public function UpdateGroup(UpdateGroupRequest $request, Group $group)
     {
+        $requestTeachers = collect($request->teachers);
+
+        $days = [];
+        foreach ($request->days as $day) {
+            if ($day > 7) {
+                return Response::error('unknown day', code: 400);
+            }
+            $days[] = $day;
+        }
+
         $group->update([
             'name' => $request->name,
             'time_id' => $request->time_id,
             'group_start_date' => $request->group_start_date,
             'group_end_date' => $request->group_end_date,
             'room_id' => $request->room_id,
-            'days' => $request->days,
+            'days' => $days,
             'course_id' => $request->course_id,
         ]);
         $teachers = TeacherInGroup::where('group_id', $group->id)->get();
         foreach ($teachers as $teacher) {
-            if (!in_array($teacher->teacher_id, $request->teacher_ids)) {
+            if (!in_array($teacher->teacher_id, $requestTeachers->pluck('teacher_id')->toArray())) {
                 $teacher->delete();
             }
         }
-        foreach ($request->teacher_ids as $id) {
-            if (!$teachers->where('teacher_id', $id)->first()) {
+        foreach ($requestTeachers as $teacher) {
+            if (!$teachers->where('teacher_id', $teacher['teacher_id'])->first()) {
                 TeacherInGroup::create([
                     'group_id' => $group->id,
-                    'teacher_id' => $id,
+                    'teacher_id' => $teacher['teacher_id'],
+                    'flex' => $teacher['flex']
                 ]);
             }
         }
