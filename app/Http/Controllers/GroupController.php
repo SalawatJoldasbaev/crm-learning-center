@@ -150,7 +150,48 @@ class GroupController extends Controller
             }
             $days[] = $day;
         }
-
+        $course = Course::find($request->course_id);
+        if (!$request->group_end_date) {
+            $end_date = strtotime($request->group_start_date . '+' . $course->month . ' months');
+        } else {
+            $end_date = strtotime($request->group_end_date);
+        }
+        $next_date = strtotime($request->group_start_date);
+        $first_lesson = 0;
+        $lessons = $group->lessons;
+        foreach ($days as $day) {
+            if (!in_array($day, $group->days)) {
+                $lessons = [];
+                $lesson = 0;
+                while ($next_date <= $end_date) {
+                    if (in_array(date('N', $next_date), $request->days)) {
+                        if ($lesson == $course->lessons_per_module) {
+                            $lesson = 1;
+                            $is_payment_day = true;
+                        } else {
+                            $lesson += 1;
+                            $is_payment_day = false;
+                        }
+                        if ($first_lesson == 0) {
+                            $first_lesson = $next_date;
+                            $lessons[] = [
+                                'lesson_the_month' => $lesson,
+                                'date' => date('Y-m-d', $first_lesson),
+                                'is_payment_day' => false,
+                            ];
+                        } else {
+                            $lessons[] = [
+                                'lesson_the_month' => $lesson,
+                                'date' => date('Y-m-d', $next_date),
+                                'is_payment_day' => $is_payment_day,
+                            ];
+                        }
+                    }
+                    $next_date += 86400;
+                }
+            }
+            break;
+        }
         $group->update([
             'name' => $request->name,
             'time_id' => $request->time_id,
@@ -159,6 +200,7 @@ class GroupController extends Controller
             'room_id' => $request->room_id,
             'days' => $days,
             'course_id' => $request->course_id,
+            'lessons' => $lessons,
         ]);
         $teachers = TeacherInGroup::where('group_id', $group->id)->get();
         foreach ($teachers as $teacher) {
