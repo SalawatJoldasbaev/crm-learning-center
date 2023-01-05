@@ -146,6 +146,11 @@ class PaymentController extends Controller
             $amount = StudentInGroup::where('group_id', $group->id)
                 ->where('active', true)
                 ->sum('amount');
+            $profit = 0;
+            foreach (TeacherInGroup::where('group_id', $group->id)->get() as $teacher) {
+                $profit += ($teacher->flex / 100) * $amount;
+            }
+            $data['profit'] += $profit;
             $data['amount'] += $amount;
         }
         return Response::success(data: $data);

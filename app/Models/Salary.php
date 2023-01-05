@@ -14,4 +14,9 @@ class Salary extends Model
         'date',
         'amount'
     ];
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }

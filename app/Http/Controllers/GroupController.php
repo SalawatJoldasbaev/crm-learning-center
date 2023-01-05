@@ -190,4 +190,17 @@ class GroupController extends Controller
         $group->save();
         return Response::success();
     }
+
+    public function ActiveStudent(Group $group, Student $student)
+    {
+        $StudentInGroup = StudentInGroup::where('student_id', $student->id)
+            ->where('group_id', $group->id)->where('active', false)->first();
+        if ($StudentInGroup) {
+            $StudentInGroup->active = true;
+            $StudentInGroup->save();
+            return Response::success();
+        } else {
+            return Response::error('not found', code: 404);
+        }
+    }
 }

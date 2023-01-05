@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Teacher\CreateTeacherRequest;
 use App\Http\Requests\Teacher\UpdateTeacherRequest;
 use App\Models\Branch;
+use App\Models\Salary;
 use App\Models\Teacher;
 use App\Src\Response;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -89,5 +91,26 @@ class TeacherController extends Controller
         }
         $teacher->update($data);
         return Response::success();
+    }
+
+    public function Salary(Request $request)
+    {
+        $from = $request->from ?? Carbon::today()->firstOfMonth()->format('Y-m-d');
+        $to = $request->to ?? Carbon::today();
+        $salaries = Salary::whereDate('date', '>=', $from)
+            ->whereDate('date', '<=', $to)
+            ->with('teacher')
+            ->get()
+            ->groupBy('teacher_id');
+        $final = [];
+
+        foreach ($salaries as $salary) {
+            $final[] = [
+                'teacher_id' => $salary[0]->teacher_id,
+                'teacher_name' => $salary[0]->teacher->name,
+                'amount' => $salary->sum('amount'),
+            ];
+        }
+        return Response::success(data: $final);
     }
 }

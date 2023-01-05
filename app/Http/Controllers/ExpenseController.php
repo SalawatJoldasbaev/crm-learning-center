@@ -31,6 +31,7 @@ class ExpenseController extends Controller
         $to = $request->to;
 
         $expenses = Expense::WhereDate('date', '>=', $from)
+            ->with('category')
             ->whereDate('date', '<=', $to)
             ->paginate($request->per_page ?? 30);
         $final = [

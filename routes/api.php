@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', 'create');
             Route::get('/', 'ShowAllTeachers');
             Route::get('/selectable', 'selectableTeachers');
+            Route::get('/salary', 'Salary');
             Route::patch('/{teacher}', 'UpdateTeacher');
         });
     Route::prefix('/students')
@@ -73,6 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', 'createGroup');
             Route::post('/attendance', [AttendanceController::class, 'SetAttendance']);
             Route::post('/active/{group}', 'ActiveGroup');
+            Route::post('/active/{group}/{student}', 'ActiveStudent');
             Route::post('/add-student', 'AddStudentToGroup');
             Route::get('/', 'ShowAllGroups');
             Route::patch('/{group}', 'UpdateGroup');

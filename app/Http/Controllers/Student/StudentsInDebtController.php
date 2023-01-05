@@ -15,15 +15,19 @@ class StudentsInDebtController extends Controller
             $query->where('first_name', 'like', '%' . $search . '%')
                 ->orWhere('last_name', 'like', '%' . $search . '%')
                 ->orWhere('phone', 'like', '%' . $search . '%');
-        })
-            ->paginate($request->per_page ?? 30);
+        });
+        $amount = clone $students;
+        $students = $students->paginate($request->per_page ?? 30);
         $final = [
             'per_page' => $students->perPage(),
             'last_page' => $students->lastPage(),
-            'data' => [],
+            'data' => [
+                'debt' => $amount->sum('balance'),
+                'students' => [],
+            ],
         ];
         foreach ($students as $student) {
-            $final['data'][] = [
+            $final['data']['students'] = [
                 'id' => $student->id,
                 'first_name' => $student->first_name,
                 'last_name' => $student->last_name,

@@ -21,6 +21,12 @@ class AttendanceController extends Controller
         if (!$check) {
             return Response::Error('student id invalid', code: 400);
         }
+        $attendance = Attendance::where('student_id', $request->student_id)
+            ->where('group_id', $request->group_id)
+            ->where('date', $request->date)->first();
+        if ($attendance) {
+            return Response::error('Existed before', code: 400);
+        }
         $group = Group::find($request->group_id);
         $course = $group->course;
         if ($request->status === true) {
@@ -68,17 +74,15 @@ class AttendanceController extends Controller
         $from = strtotime($request?->from ?? 0);
         $to = strtotime($request?->to ?? 0);
 
-        $startDate = strtotime($group->group_start_date);
         if ($group->group_end_date == null) {
             $endDate = strtotime($group->group_start_date . '+' . $group->course->month . ' months');
         } else {
             $endDate = strtotime($group->group_end_date);
         }
-        if ($from < $startDate or $to > $endDate) {
+        if ($to > $endDate) {
             return Response::error('from and to invalid', code: 400);
         }
         $next_date = $from;
-        $all_days = [];
         $final = [
             'days' => [],
             'students' => []
