@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Src\Response;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class StudentsInDebtController extends Controller
@@ -17,12 +18,15 @@ class StudentsInDebtController extends Controller
                 ->orWhere('phone', 'like', '%' . $search . '%');
         });
         $amount = clone $students;
+        $amount = $amount->select(
+            DB::raw('SUM(balance) as balance'),
+        )->first();
         $students = $students->paginate($request->per_page ?? 30);
         $final = [
             'per_page' => $students->perPage(),
             'last_page' => $students->lastPage(),
             'data' => [
-                'debt' => $amount->sum('balance'),
+                'debt' => $amount->balance,
                 'students' => [],
             ],
         ];
