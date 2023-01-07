@@ -27,7 +27,7 @@ class StudentsInDebtController extends Controller
             ],
         ];
         foreach ($students as $student) {
-            $final['data']['students'] = [
+            $final['data']['students'][] = [
                 'id' => $student->id,
                 'first_name' => $student->first_name,
                 'last_name' => $student->last_name,
