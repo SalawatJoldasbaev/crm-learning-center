@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Expenses\NewExpenseRequest;
 use App\Http\Requests\FromToRequest;
 use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use App\Src\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,5 +55,11 @@ class ExpenseController extends Controller
             ];
         }
         return Response::success(data: $final);
+    }
+
+    public function GetExpenseCategoires(Request $request)
+    {
+        $categoires = ExpenseCategory::all(['id', 'name']);
+        return Response::success(data: $categoires->toArray());
     }
 }

@@ -97,6 +97,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->group(function () {
             Route::post('/', 'NewExpense');
             Route::get('/', 'GetExpenses');
+            Route::get('/categories', 'GetExpenseCategoires');
         });
     Route::get('/schedule', [ScheduleController::class, 'GetSchedule']);
     Route::get('/expected', [PaymentController::class, 'Expected']);
