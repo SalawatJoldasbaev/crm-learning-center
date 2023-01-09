@@ -99,7 +99,7 @@ class AttendanceController extends Controller
         $attendances = Attendance::whereDate('date', '>=', date('Y-m-d', $from))
             ->whereDate('date', '<=', date('Y-m-d', $to))
             ->where('group_id', $group->id)
-            ->get(['student_id', 'date', 'status', 'description']);
+            ->get(['id', 'student_id', 'date', 'status', 'description']);
         foreach ($students as $student) {
             $active = $student->active;
             $studentStartDate = $student->start_date;
@@ -120,5 +120,24 @@ class AttendanceController extends Controller
             ];
         }
         return $final;
+    }
+
+    public function removeAttendance(Request $request, Attendance $attendance)
+    {
+        $group = Group::find($attendance->group_id);
+        $course = $group->course;
+        if ($attendance->status === true) {
+            $teachers = TeacherInGroup::where('group_id', $attendance->group_id)->get();
+            foreach ($teachers as $teacher) {
+                $salary = Salary::where('teacher_id', $teacher->teacher_id)
+                    ->where('date', $attendance->date)->first();
+                $flex = ($teacher->flex / 100) * $course->price / $course->lessons_per_module;
+                $salary->update([
+                    'amount' => $salary->amount - $flex,
+                ]);
+            }
+        }
+        $attendance->delete();
+        return Response::success();
     }
 }

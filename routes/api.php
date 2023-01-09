@@ -73,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->group(function () {
             Route::post('/', 'createGroup');
             Route::post('/attendance', [AttendanceController::class, 'SetAttendance']);
+            Route::delete('/attendance/{attendance}', [AttendanceController::class, 'removeAttendance']);
             Route::post('/active/{group}', 'ActiveGroup');
             Route::post('/active/{group}/{student}', 'ActiveStudent');
             Route::post('/add-student', 'AddStudentToGroup');
