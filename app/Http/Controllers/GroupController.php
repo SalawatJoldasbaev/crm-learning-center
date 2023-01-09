@@ -205,7 +205,7 @@ class GroupController extends Controller
         $teachers = TeacherInGroup::where('group_id', $group->id)->get();
         $ids = $requestTeachers->pluck('teacher_id')->toArray();
         foreach ($teachers as $teacher) {
-            $requestTeacher = $requestTeachers->where('teacher_id', $teacher->id)->first();
+            $requestTeacher = $requestTeachers->where('teacher_id', $teacher->teacher_id)->first();
             if (!in_array($teacher->teacher_id, $ids)) {
                 $teacher->delete();
             }

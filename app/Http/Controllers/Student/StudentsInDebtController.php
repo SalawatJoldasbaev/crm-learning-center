@@ -18,9 +18,8 @@ class StudentsInDebtController extends Controller
                 ->orWhere('phone', 'like', '%' . $search . '%');
         });
         $amount = clone $students;
-        $amount = $amount->select(
-            DB::raw('SUM(balance) as balance'),
-        )->first();
+        // return $amount->sum('balance');
+        $amount = $amount->select(DB::raw('SUM(balance) as balance'))->first();
         $students = $students->paginate($request->per_page ?? 30);
         $final = [
             'per_page' => $students->perPage(),
