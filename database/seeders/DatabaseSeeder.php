@@ -49,11 +49,13 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(8899),
             'address' => 'Shomanay',
             'birthday' => '2003-09-19',
-            'addition_phone' => '[{"label": "Mother","phone": "+998993898984"},{"label": "Bro","phone": "+998953558899"}]',
+            'addition_phone' => json_encode([
+                'label' => 'Mother',
+                'phone' => '+998993898984'
+            ]),
             'gender' => 'male',
             'balance' => 0,
         ]);
-
         Course::create([
             'name' => 'Back-end php',
             'file_id' => null,
