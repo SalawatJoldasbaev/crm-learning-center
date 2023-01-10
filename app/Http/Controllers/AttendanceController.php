@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FromToRequest;
 use Carbon\Carbon;
 use App\Models\Group;
 use App\Src\Response;
@@ -69,7 +70,7 @@ class AttendanceController extends Controller
         return Response::success();
     }
 
-    public function GetAttendance(Request $request, Group $group)
+    public function GetAttendance(FromToRequest $request, Group $group)
     {
         $from = $request?->from;
         $to = $request?->to;
