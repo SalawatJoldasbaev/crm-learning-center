@@ -71,30 +71,19 @@ class AttendanceController extends Controller
 
     public function GetAttendance(Request $request, Group $group)
     {
-        $from = strtotime($request?->from ?? 0);
-        $to = strtotime($request?->to ?? 0);
+        $from = $request?->from;
+        $to = $request?->to;
+        $endDate = strtotime($group->group_end_date);
+        $groupDays = collect($group->lessons)
+            ->whereDate('date', '>=', $from)
+            ->whereDate('date', '<=', $to)->values();
+        $days = [];
 
-        if ($group->group_end_date == null) {
-            $endDate = strtotime($group->group_start_date . '+' . $group->course->month . ' months');
-        } else {
-            $endDate = strtotime($group->group_end_date);
-        }
-        if ($to > $endDate) {
-            return Response::error('from and to invalid', code: 400);
-        }
-        $next_date = $from;
         $final = [
-            'days' => [],
+            'days' => $groupDays,
             'students' => []
         ];
-        while ($next_date <= $to) {
-            if (in_array(date('N', $next_date), $group->days)) {
-                $final['days'][] = [
-                    'data' => date('Y-m-d', $next_date)
-                ];
-            }
-            $next_date += 86400;
-        }
+
         $students = StudentInGroup::where('group_id', $group->id)->get();
         $attendances = Attendance::whereDate('date', '>=', date('Y-m-d', $from))
             ->whereDate('date', '<=', date('Y-m-d', $to))
