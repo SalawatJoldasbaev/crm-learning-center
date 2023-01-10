@@ -25,11 +25,10 @@ class DatabaseSeeder extends Seeder
         Branch::create([
             'name' => 'Main Branch',
         ]);
-
         Employee::create([
             'name' => 'CEO',
-            'phone' => '+998953558899',
-            'password' => Hash::make(8899),
+            'phone' => '+998974078777',
+            'password' => Hash::make(8777),
             'role' => ['ceo'],
             'gender' => 'male',
         ]);
