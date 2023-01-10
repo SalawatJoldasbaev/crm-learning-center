@@ -260,6 +260,8 @@ class GroupController extends Controller
         if ($StudentInGroup) {
             $StudentInGroup->active = true;
             $StudentInGroup->save();
+            $student->balance -= $StudentInGroup->amount;
+            $student->save();
             return Response::success();
         } else {
             return Response::error('not found', code: 404);
