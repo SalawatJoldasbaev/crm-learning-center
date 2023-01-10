@@ -85,8 +85,8 @@ class AttendanceController extends Controller
         ];
 
         $students = StudentInGroup::where('group_id', $group->id)->get();
-        $attendances = Attendance::whereDate('date', '>=', date('Y-m-d', $from))
-            ->whereDate('date', '<=', date('Y-m-d', $to))
+        $attendances = Attendance::whereDate('date', '>=', $from)
+            ->whereDate('date', '<=', $to)
             ->where('group_id', $group->id)
             ->get(['id', 'student_id', 'date', 'status', 'description']);
         foreach ($students as $student) {
