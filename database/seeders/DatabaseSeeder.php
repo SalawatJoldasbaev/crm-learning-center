@@ -49,10 +49,10 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(8899),
             'address' => 'Shomanay',
             'birthday' => '2003-09-19',
-            'addition_phone' => [
+            'addition_phone' => [[
                 'label' => 'Mother',
                 'phone' => '+998993898984'
-            ],
+            ]],
             'gender' => 'male',
             'balance' => 0,
         ]);
