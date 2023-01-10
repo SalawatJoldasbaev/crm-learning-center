@@ -75,8 +75,8 @@ class AttendanceController extends Controller
         $to = $request?->to;
         $endDate = strtotime($group->group_end_date);
         $groupDays = collect($group->lessons)
-            ->whereDate('date', '>=', $from)
-            ->whereDate('date', '<=', $to)->values();
+            ->where('date', '>=', $from)
+            ->where('date', '<=', $to)->values();
         $days = [];
 
         $final = [
