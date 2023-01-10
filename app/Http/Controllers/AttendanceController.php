@@ -78,9 +78,13 @@ class AttendanceController extends Controller
             ->where('date', '>=', $from)
             ->where('date', '<=', $to)->values();
         $days = [];
-
+        foreach ($groupDays as $groupDay) {
+            $day[] = [
+                'date' => $groupDay['date'],
+            ];
+        }
         $final = [
-            'days' => $groupDays,
+            'days' => $days,
             'students' => []
         ];
 
